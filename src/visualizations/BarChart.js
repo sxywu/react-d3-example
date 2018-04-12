@@ -4,7 +4,7 @@ import chroma from 'chroma-js';
 
 const width = 650;
 const height = 400;
-const margin = {top: 20, right: 10, bottom: 20, left: 25};
+const margin = {top: 20, right: 5, bottom: 20, left: 35};
 const red = '#eb6a5b';
 const green = '#b6e86f';
 const blue = '#52b6ca';
@@ -21,7 +21,8 @@ class BarChart extends Component {
 
   xAxis = d3.axisBottom().scale(this.state.xScale)
     .tickFormat(d3.timeFormat('%b'));
-  yAxis = d3.axisLeft().scale(this.state.yScale);
+  yAxis = d3.axisLeft().scale(this.state.yScale)
+    .tickFormat(d => `${d}℉`);
 
   static getDerivedStateFromProps(nextProps, prevState) {
     if (!nextProps.data) return null; // data hasn't been loaded yet so do nothing
