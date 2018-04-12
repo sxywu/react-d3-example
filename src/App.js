@@ -4,6 +4,7 @@ import './App.css';
 import LineChart from './visualizations/LineChart';
 import BarChart from './visualizations/BarChart';
 import RadialChart from './visualizations/RadialChart';
+import Chart from './visualizations/Chart';
 
 class App extends Component {
   state = {
@@ -36,7 +37,7 @@ class App extends Component {
     return (
       <div className="App">
         <h1>
-          2017 temperatures for
+          2017 Temperatures for
           <select name='city' onChange={this.updateCity}>
             {
               [
@@ -53,12 +54,14 @@ class App extends Component {
           *warning: these are <em>not</em> meant to be good examples of data visualizations,<br />
           but just to show the possibility of using D3 and React*
         </p>
-        <span>
-          <div>LineChart.js</div>
-          <LineChart data={data} />
-        </span>
+        <LineChart data={data} />
         <BarChart data={data} />
+        <Chart data={data} />
         <RadialChart data={data} />
+
+        <p>
+          (Weather data from <a href='wunderground.com'>wunderground.com</a>)
+        </p>
       </div>
     );
   }
