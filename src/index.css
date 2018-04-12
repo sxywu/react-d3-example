@@ -3,3 +3,17 @@ body {
   padding: 0;
   font-family: 'Libre Baskerville', serif;
 }
+
+select, option {
+  font-family: 'Libre Baskerville', serif;
+}
+
+select {
+  display: block;
+  font-size: 18px;
+  margin: 20px;
+}
+
+svg {
+  border: 1px solid #666;
+}
