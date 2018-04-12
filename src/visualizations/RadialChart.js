@@ -67,7 +67,6 @@ class RadialChart extends Component {
               <text y={-d.r - 2} textAnchor='middle' fill='#cfcfcf'>{d.temp}</text>
             </g>
           ))}
-
         </g>
       </svg>
     );

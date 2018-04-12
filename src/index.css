@@ -9,11 +9,16 @@ select, option {
 }
 
 select {
-  display: block;
-  font-size: 18px;
-  margin: 20px;
+  font-size: 32px;
+  margin-left: 12px;
 }
 
 svg {
   border: 1px solid #666;
+  margin: 5px;
+}
+
+svg text {
+  font-family: sans-serif;
+  font-size: 10px;
 }
