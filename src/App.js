@@ -22,7 +22,7 @@ class App extends Component {
     });
   }
 
-  updateCity(e) {
+  updateCity = (e) => {
     this.setState({city: e.target.value});
   }
 
