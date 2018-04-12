@@ -23,20 +23,22 @@ class LineChart extends Component {
 
   static getDerivedStateFromProps(nextProps, prevState) {
     if (!nextProps.data) return null; // data hasn't been loaded yet so do nothing
+    const {data} = nextProps;
+    const {xScale, yScale, lineGenerator} = prevState;
 
     // data has changed, so recalculate scale domains
-    const timeDomain = d3.extent(nextProps.data, d => d.date);
-    const tempMax = d3.max(nextProps.data, d => d.high);
-    prevState.xScale.domain(timeDomain);
-    prevState.yScale.domain([0, tempMax]);
+    const timeDomain = d3.extent(data, d => d.date);
+    const tempMax = d3.max(data, d => d.high);
+    xScale.domain(timeDomain);
+    yScale.domain([0, tempMax]);
 
     // calculate line for lows
-    prevState.lineGenerator.x(d => prevState.xScale(d.date));
-    prevState.lineGenerator.y(d => prevState.yScale(d.low));
-    const lows = prevState.lineGenerator(nextProps.data);
+    lineGenerator.x(d => xScale(d.date));
+    lineGenerator.y(d => yScale(d.low));
+    const lows = lineGenerator(data);
     // and then highs
-    prevState.lineGenerator.y(d => prevState.yScale(d.high));
-    const highs = prevState.lineGenerator(nextProps.data);
+    lineGenerator.y(d => yScale(d.high));
+    const highs = lineGenerator(data);
 
     return {lows, highs};
   }
