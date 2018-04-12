@@ -27,6 +27,8 @@ class App extends Component {
   }
 
   render() {
+    const data = this.state.temps[this.state.city];
+
     return (
       <div className="App">
         <select name='city' onChange={this.updateCity}>
@@ -36,6 +38,7 @@ class App extends Component {
             })
           }
         </select>
+        <LineChart data={data} />
       </div>
     );
   }
