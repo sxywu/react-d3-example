@@ -13,6 +13,7 @@ const colors = chroma.scale([blue, green, red]);
 class RadialChart extends Component {
   state = {
     slices: [], // array of svg path commands, each representing a day
+    tempAnnotations: [],
     // d3 helpers
     radiusScale: d3.scaleLinear().range([0, width / 2]),
     colorScale: d3.scaleLinear(),
@@ -43,8 +44,14 @@ class RadialChart extends Component {
       return {path, fill: colors(colorScale(d.avg))};
     });
 
-console.log(slices)
-    return {slices};
+    const tempAnnotations = [5, 20, 40, 60, 80].map(temp => {
+      return {
+        r: radiusScale(temp),
+        temp,
+      }
+    });
+
+    return {slices, tempAnnotations};
   }
 
   render() {
@@ -53,6 +60,14 @@ console.log(slices)
       <svg width={width} height={height}>
         <g transform={`translate(${width / 2}, ${height / 2})`}>
           {this.state.slices.map(d => (<path d={d.path} fill={d.fill} />))}
+
+          {this.state.tempAnnotations.map(d => (
+            <g>
+              <circle r={d.r} fill='none' stroke='#cfcfcf' />
+              <text y={-d.r - 2} textAnchor='middle' fill='#cfcfcf'>{d.temp}</text>
+            </g>
+          ))}
+
         </g>
       </svg>
     );
