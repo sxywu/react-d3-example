@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import * as d3 from 'd3';
 
-const width = 600;
+const width = 650;
 const height = 400;
 const margin = {top: 20, right: 10, bottom: 20, left: 25};
 const red = '#eb6a5b';
@@ -14,7 +14,7 @@ class LineChart extends Component {
     // d3 helpers
     xScale: d3.scaleTime().range([margin.left, width - margin.right]),
     yScale: d3.scaleLinear().range([height - margin.bottom, margin.top]),
-    lineGenerator: d3.line().curve(d3.curveBasis),
+    lineGenerator: d3.line(),
   };
 
   xAxis = d3.axisBottom().scale(this.state.xScale)
@@ -52,8 +52,8 @@ class LineChart extends Component {
 
     return (
       <svg width={width} height={height}>
-        <path d={this.state.highs} fill='none' stroke={red} strokeWidth='3' />
-        <path d={this.state.lows} fill='none' stroke={blue} strokeWidth='3' />
+        <path d={this.state.highs} fill='none' stroke={red} strokeWidth='2' />
+        <path d={this.state.lows} fill='none' stroke={blue} strokeWidth='2' />
         <g>
           <g ref='xAxis' transform={`translate(0, ${height - margin.bottom})`} />
           <g ref='yAxis' transform={`translate(${margin.left}, 0)`} />
