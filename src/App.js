@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {timeParse} from 'd3';
 import './App.css';
 import LineChart from './visualizations/LineChart';
+import BarChart from './visualizations/BarChart';
 
 class App extends Component {
   state = {
@@ -38,6 +39,7 @@ class App extends Component {
             })
           }
         </select>
+        <BarChart data={data} />
         <LineChart data={data} />
       </div>
     );
