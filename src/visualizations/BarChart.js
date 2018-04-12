@@ -6,7 +6,9 @@ const width = 650;
 const height = 400;
 const margin = {top: 20, right: 10, bottom: 20, left: 25};
 const red = '#eb6a5b';
+const green = '#b6e86f';
 const blue = '#52b6ca';
+const colors = chroma.scale([blue, green, red]);
 
 class LineChart extends Component {
   state = {
@@ -15,6 +17,7 @@ class LineChart extends Component {
     // d3 helpers
     xScale: d3.scaleTime().range([margin.left, width - margin.right]),
     yScale: d3.scaleLinear().range([height - margin.bottom, margin.top]),
+    colorScale: d3.scaleLinear(),
   };
 
   xAxis = d3.axisBottom().scale(this.state.xScale)
@@ -29,8 +32,10 @@ class LineChart extends Component {
     // data has changed, so recalculate scale domains
     const timeDomain = d3.extent(data, d => d.date);
     const tempMax = d3.max(data, d => d.high);
+    const tempMin = d3.min(data, d => d.low);
     xScale.domain(timeDomain);
     yScale.domain([0, tempMax]);
+    colorScale.domain([tempMin, tempMax]);
 
     // calculate x and y for each rectangle
     const highs = data.map(d => {
@@ -38,6 +43,7 @@ class LineChart extends Component {
       return {
         x: xScale(d.date),
         y, height: height - margin.bottom - y,
+        fill: colors(colorScale(d.high)),
       }
     });
     const lows = data.map(d => {
@@ -45,6 +51,7 @@ class LineChart extends Component {
       return {
         x: xScale(d.date),
         y, height: height - margin.bottom - y,
+        fill: colors(colorScale(d.low)),
       }
     });
 
@@ -61,9 +68,9 @@ class LineChart extends Component {
     return (
       <svg width={width} height={height}>
         {this.state.highs.map(d =>
-          (<rect x={d.x} y={d.y} width='2' height={d.height} fill={red} />))}
+          (<rect x={d.x} y={d.y} width='2' height={d.height} fill={d.fill} />))}
         {this.state.lows.map(d =>
-          (<rect x={d.x} y={d.y} width='2' height={d.height} fill={blue} />))}
+          (<rect x={d.x} y={d.y} width='2' height={d.height} fill={d.fill} />))}
         <g>
           <g ref='xAxis' transform={`translate(0, ${height - margin.bottom})`} />
           <g ref='yAxis' transform={`translate(${margin.left}, 0)`} />
