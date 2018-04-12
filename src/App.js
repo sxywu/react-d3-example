@@ -3,6 +3,7 @@ import {timeParse} from 'd3';
 import './App.css';
 import LineChart from './visualizations/LineChart';
 import BarChart from './visualizations/BarChart';
+import RadialChart from './visualizations/RadialChart';
 
 class App extends Component {
   state = {
@@ -52,8 +53,12 @@ class App extends Component {
           *warning: these are <em>not</em> meant to be good examples of data visualizations,<br />
           but just to show the possibility of using D3 and React*
         </p>
+        <span>
+          <div>LineChart.js</div>
+          <LineChart data={data} />
+        </span>
         <BarChart data={data} />
-        <LineChart data={data} />
+        <RadialChart data={data} />
       </div>
     );
   }
