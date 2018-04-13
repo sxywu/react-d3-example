@@ -3,7 +3,7 @@ import * as d3 from 'd3';
 import chroma from 'chroma-js';
 
 const width = 650;
-const height = 650;
+const height = 400;
 const margin = {top: 20, right: 5, bottom: 20, left: 35};
 const red = '#eb6a5b';
 const green = '#b6e86f';
@@ -17,7 +17,7 @@ class Chart extends Component {
   };
 
   xScale = d3.scaleTime().range([margin.left, width - margin.right]);
-  yScale = d3.scaleLinear().range([0, width / 2]);
+  yScale = d3.scaleLinear().range([height - margin.bottom, margin.top]);
 
   xAxis = d3.axisBottom().scale(this.xScale)
     .tickFormat(d3.timeFormat('%b'));
