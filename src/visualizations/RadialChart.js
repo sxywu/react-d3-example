@@ -4,7 +4,6 @@ import chroma from 'chroma-js';
 
 const width = 650;
 const height = 650;
-const margin = {top: 20, right: 10, bottom: 20, left: 25};
 const red = '#eb6a5b';
 const green = '#b6e86f';
 const blue = '#52b6ca';
@@ -59,10 +58,10 @@ class RadialChart extends Component {
     return (
       <svg width={width} height={height}>
         <g transform={`translate(${width / 2}, ${height / 2})`}>
-          {this.state.slices.map(d => (<path d={d.path} fill={d.fill} />))}
+          {this.state.slices.map((d, i) => (<path key={i} d={d.path} fill={d.fill} />))}
 
-          {this.state.tempAnnotations.map(d => (
-            <g>
+          {this.state.tempAnnotations.map((d, i) => (
+            <g key={i}>
               <circle r={d.r} fill='none' stroke='#999' />
               <text y={-d.r - 2} textAnchor='middle'>{d.temp}℉</text>
             </g>

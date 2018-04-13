@@ -61,8 +61,8 @@ class BarChart extends Component {
 
     return (
       <svg width={width} height={height}>
-        {this.state.bars.map(d =>
-          (<rect x={d.x} y={d.y} width='2' height={d.height} fill={d.fill} />))}
+        {this.state.bars.map((d, i) =>
+          (<rect key={i} x={d.x} y={d.y} width='2' height={d.height} fill={d.fill} />))}
         <g>
           <g ref='xAxis' transform={`translate(0, ${height - margin.bottom})`} />
           <g ref='yAxis' transform={`translate(${margin.left}, 0)`} />

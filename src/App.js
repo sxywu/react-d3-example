@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import {timeParse} from 'd3';
 import './App.css';
 import LineChart from './visualizations/LineChart';
 import BarChart from './visualizations/BarChart';
@@ -56,11 +55,12 @@ class App extends Component {
         </p>
         <LineChart data={data} />
         <BarChart data={data} />
+        <br />
         <Chart data={data} />
         <RadialChart data={data} />
 
         <p>
-          (Weather data from <a href='wunderground.com'>wunderground.com</a>)
+          (Weather data from <a href='wunderground.com' target='_new'>wunderground.com</a>)
         </p>
       </div>
     );
