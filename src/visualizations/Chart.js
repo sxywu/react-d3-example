@@ -12,7 +12,8 @@ const colors = chroma.scale([blue, green, red]);
 
 class Chart extends Component {
   state = {
-    slices: [],
+    highs: null,
+    lows: null,
   };
 
   xScale = d3.scaleTime().range([margin.left, width - margin.right]);
