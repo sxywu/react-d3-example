@@ -8,7 +8,7 @@ import Chart from './visualizations/Chart';
 class App extends Component {
   state = {
     temps: {},
-    city: 'am', // city whose temperatures to show
+    city: 'sf', // city whose temperatures to show
   };
 
   componentDidMount() {
@@ -20,7 +20,7 @@ class App extends Component {
     .then(([sf, ny, am]) => {
       sf.forEach(day => day.date = new Date(day.date));
       ny.forEach(day => day.date = new Date(day.date));
-      am.forEach(day => day.date = new Date(day.date));
+      // am.forEach(day => day.date = new Date(day.date));
 
       this.setState({temps: {sf, ny, am}});
     });
@@ -40,9 +40,9 @@ class App extends Component {
           <select name='city' onChange={this.updateCity}>
             {
               [
-                {label: 'Amsterdam', value: 'am'},
                 {label: 'San Francisco', value: 'sf'},
                 {label: 'New York', value: 'ny'},
+                  // {label: 'Amsterdam', value: 'am'},
               ].map(option => {
                 return (<option key={option.value} value={option.value}>{option.label}</option>);
               })
