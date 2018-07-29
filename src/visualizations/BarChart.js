@@ -55,14 +55,23 @@ class BarChart extends Component {
   componentDidUpdate() {
     d3.select(this.refs.xAxis).call(this.xAxis);
     d3.select(this.refs.yAxis).call(this.yAxis);
+
+    d3.select(this.refs.bars).selectAll('rect')
+      .data(this.state.bars)
+      .transition()
+      .attr('y', d => d.y)
+      .attr('height', d => d.height)
+      .attr('fill', d => d.fill);
   }
 
   render() {
 
     return (
       <svg width={width} height={height}>
-        {this.state.bars.map((d, i) =>
-          (<rect key={i} x={d.x} y={d.y} width='2' height={d.height} fill={d.fill} />))}
+        <g ref='bars'>
+          {this.state.bars.map((d, i) =>
+            (<rect key={i} x={d.x} width='2' />))}
+        </g>
         <g>
           <g ref='xAxis' transform={`translate(0, ${height - margin.bottom})`} />
           <g ref='yAxis' transform={`translate(${margin.left}, 0)`} />

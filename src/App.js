@@ -55,8 +55,6 @@ class App extends Component {
         </p>
         <LineChart data={data} />
         <BarChart data={data} />
-        <br />
-        <Chart data={data} />
         <RadialChart data={data} />
 
         <p>

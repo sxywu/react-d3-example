@@ -53,12 +53,22 @@ class RadialChart extends Component {
     return {slices, tempAnnotations};
   }
 
+  componentDidUpdate() {
+    d3.select(this.refs.slices).selectAll('path')
+      .data(this.state.slices)
+      .transition()
+      .attr('d', d => d.path)
+      .attr('fill', d => d.fill);
+  }
+
   render() {
 
     return (
       <svg width={width} height={height}>
         <g transform={`translate(${width / 2}, ${height / 2})`}>
-          {this.state.slices.map((d, i) => (<path key={i} d={d.path} fill={d.fill} />))}
+          <g ref='slices'>
+            {this.state.slices.map((d, i) => (<path key={i} />))}
+          </g>
 
           {this.state.tempAnnotations.map((d, i) => (
             <g key={i}>

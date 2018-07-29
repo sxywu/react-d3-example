@@ -47,14 +47,21 @@ class LineChart extends Component {
   componentDidUpdate() {
     d3.select(this.refs.xAxis).call(this.xAxis);
     d3.select(this.refs.yAxis).call(this.yAxis);
+
+    d3.select(this.refs.highs)
+      .transition()
+      .attr('d', this.state.highs);
+    d3.select(this.refs.lows)
+      .transition()
+      .attr('d', this.state.lows);
   }
 
   render() {
 
     return (
       <svg width={width} height={height}>
-        <path d={this.state.highs} fill='none' stroke={red} strokeWidth='2' />
-        <path d={this.state.lows} fill='none' stroke={blue} strokeWidth='2' />
+        <path ref='highs' fill='none' stroke={red} strokeWidth='2' />
+        <path ref='lows' fill='none' stroke={blue} strokeWidth='2' />
         <g>
           <g ref='xAxis' transform={`translate(0, ${height - margin.bottom})`} />
           <g ref='yAxis' transform={`translate(${margin.left}, 0)`} />
