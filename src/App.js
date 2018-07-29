@@ -53,11 +53,8 @@ class App extends Component {
           *warning: these are <em>not</em> meant to be good examples of data visualizations,<br />
           but just to show the possibility of using D3 and React*
         </p>
-        <LineChart data={data} />
         <BarChart data={data} />
-        <br />
         <Chart data={data} />
-        <RadialChart data={data} />
 
         <p>
           (Weather data from <a href='wunderground.com' target='_new'>wunderground.com</a>)
