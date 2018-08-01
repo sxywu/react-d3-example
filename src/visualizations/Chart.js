@@ -1,31 +1,23 @@
-import React, { Component } from 'react';
-import * as d3 from 'd3';
-import chroma from 'chroma-js';
+import React, { Component } from "react";
+import * as d3 from "d3";
+import chroma from "chroma-js";
 
 const width = 650;
 const height = 400;
-const margin = {top: 20, right: 5, bottom: 20, left: 35};
-const red = '#eb6a5b';
-const green = '#b6e86f';
-const blue = '#52b6ca';
-const colors = chroma.scale([blue, green, red]);
+const margin = { top: 20, right: 5, bottom: 20, left: 35 };
 
 class Chart extends Component {
-  state = {
-  };
+  state = {};
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    const {data} = nextProps;
+    const { data } = nextProps;
     if (!data) return {};
 
     return {};
   }
 
   render() {
-    return (
-      <svg width={width} height={height}>
-      </svg>
-    );
+    return <svg width={width} height={height} />;
   }
 }
 
