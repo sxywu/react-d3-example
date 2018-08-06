@@ -9,14 +9,8 @@ class BarChart extends Component {
     bars: []
   };
 
-  xAxis = d3
-    .axisBottom()
-    .scale(this.state.xScale)
-    .tickFormat(d3.timeFormat("%b"));
-  yAxis = d3
-    .axisLeft()
-    .scale(this.state.yScale)
-    .tickFormat(d => `${d}℉`);
+  xAxis = d3.axisBottom().tickFormat(d3.timeFormat("%b"));
+  yAxis = d3.axisLeft().tickFormat(d => `${d}℉`);
 
   static getDerivedStateFromProps(nextProps, prevState) {
     const { data } = nextProps;
