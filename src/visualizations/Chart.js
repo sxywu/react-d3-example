@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import * as d3 from "d3";
-import chroma from "chroma-js";
 
 const width = 650;
 const height = 400;
