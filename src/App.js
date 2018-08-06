@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
-import LineChart from "./visualizations/LineChart";
 import BarChart from "./visualizations/BarChart";
-import RadialChart from "./visualizations/RadialChart";
 import Chart from "./visualizations/Chart";
 
 class App extends Component {
