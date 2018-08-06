@@ -1,72 +1,78 @@
-import React, { Component } from 'react';
-import * as d3 from 'd3';
-import chroma from 'chroma-js';
-
+import React, { Component } from "react";
+import * as d3 from "d3";
 const width = 650;
 const height = 400;
-const margin = {top: 20, right: 5, bottom: 20, left: 35};
-const red = '#eb6a5b';
-const green = '#b6e86f';
-const blue = '#52b6ca';
-const colors = chroma.scale([blue, green, red]).mode('hsl');
+const margin = { top: 20, right: 5, bottom: 20, left: 35 };
 
 class BarChart extends Component {
   state = {
-    bars: [], // array of rects
-    // d3 helpers
-    xScale: d3.scaleTime().range([margin.left, width - margin.right]),
-    yScale: d3.scaleLinear().range([height - margin.bottom, margin.top]),
-    colorScale: d3.scaleLinear(),
+    bars: []
   };
 
-  xAxis = d3.axisBottom().scale(this.state.xScale)
-    .tickFormat(d3.timeFormat('%b'));
-  yAxis = d3.axisLeft().scale(this.state.yScale)
+  xAxis = d3
+    .axisBottom()
+    .scale(this.state.xScale)
+    .tickFormat(d3.timeFormat("%b"));
+  yAxis = d3
+    .axisLeft()
+    .scale(this.state.yScale)
     .tickFormat(d => `${d}℉`);
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    if (!nextProps.data) return null; // data hasn't been loaded yet so do nothing
-    const {data} = nextProps;
-    const {xScale, yScale, colorScale} = prevState;
+    const { data } = nextProps;
+    if (!data) return {};
+    // 1. map date to x-position
+    // get min and max of date
+    const extent = d3.extent(data, d => d.date);
+    const xScale = d3
+      .scaleTime()
+      .domain(extent)
+      .range([margin.left, width - margin.right]);
 
-    // data has changed, so recalculate scale domains
-    const timeDomain = d3.extent(data, d => d.date);
-    const tempMax = d3.max(data, d => d.high);
-    const colorDomain = d3.extent(data, d => d.avg);
-    xScale.domain(timeDomain);
-    yScale.domain([0, tempMax]);
-    colorScale.domain(colorDomain);
+    // 2. map high temp to y-position
+    // get min/max of high temp
+    const [min, max] = d3.extent(data, d => d.high);
+    const yScale = d3
+      .scaleLinear()
+      .domain([Math.min(min, 0), max])
+      .range([height - margin.bottom, margin.top]);
 
-    // calculate x and y for each rectangle
+    // 3. map avg temp to color
+    // get min/max of avg
+    const colorExtent = d3.extent(data, d => d.avg).reverse();
+    const colorScale = d3
+      .scaleSequential()
+      .domain(colorExtent)
+      .interpolator(d3.interpolateRdYlBu);
+
+    // array of objects: x, y, height
     const bars = data.map(d => {
-      const y1 = yScale(d.high);
-      const y2 = yScale(d.low);
       return {
         x: xScale(d.date),
-        y: y1,
-        height: y2 - y1,
-        fill: colors(colorScale(d.avg)),
-      }
+        y: yScale(d.high),
+        height: yScale(d.low) - yScale(d.high),
+        fill: colorScale(d.avg)
+      };
     });
 
-    return {bars};
+    return { bars, xScale, yScale };
   }
 
   componentDidUpdate() {
+    this.xAxis.scale(this.state.xScale);
     d3.select(this.refs.xAxis).call(this.xAxis);
+    this.yAxis.scale(this.state.yScale);
     d3.select(this.refs.yAxis).call(this.yAxis);
   }
 
   render() {
-
     return (
       <svg width={width} height={height}>
-        {this.state.bars.map((d, i) =>
-          (<rect key={i} x={d.x} y={d.y} width='2' height={d.height} fill={d.fill} />))}
-        <g>
-          <g ref='xAxis' transform={`translate(0, ${height - margin.bottom})`} />
-          <g ref='yAxis' transform={`translate(${margin.left}, 0)`} />
-        </g>
+        {this.state.bars.map(d => (
+          <rect x={d.x} y={d.y} width={2} height={d.height} fill={d.fill} />
+        ))}
+        <g ref="xAxis" transform={`translate(0, ${height - margin.bottom})`} />
+        <g ref="yAxis" transform={`translate(${margin.left}, 0)`} />
       </svg>
     );
   }
