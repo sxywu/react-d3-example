@@ -1,17 +1,36 @@
 import React, { Component } from 'react';
+import _ from "lodash";
+import inflation from "us-inflation";
+
+const startYear = 2013;
+const numYears = 5;
 
 class App extends Component {
   state = {
+    movies: [],
+    filteredMovies: [],
   };
 
   componentDidMount() {
-    Promise.all([
-      // fetch(`${process.env.PUBLIC_URL}/sf.json`),
-      // fetch(`${process.env.PUBLIC_URL}/ny.json`),
-      // fetch(`${process.env.PUBLIC_URL}/am.json`),
-    ]).then(responses => Promise.all(responses.map(resp => resp.json())))
-    .then(([]) => {
-    });
+    fetch(`${process.env.PUBLIC_URL || ''}/movies.json`)
+      .then(resp => resp.json())
+      .then(movies => {
+        movies = _.chain(movies)
+          .map(d => {
+            const year = +d.Year;
+            const date = new Date(d.Released);
+            const boxOffice = parseInt(d.BoxOffice.replace(/[\$\,]/g, ""));
+            return {
+              title: d.Title,
+              date,
+              boxOffice: boxOffice && inflation({ year, amount: boxOffice }),
+              score: +d.Metascore,
+              year
+            };
+          }).filter(d => d.boxOffice && d.year >= startYear)
+          .value();
+        this.setState({movies});
+      });
   }
 
   render() {
