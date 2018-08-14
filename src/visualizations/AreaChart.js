@@ -4,14 +4,21 @@ import _ from "lodash";
 
 const width = 1000;
 const height = 300;
-const margin = {top: 0, right: 20, bottom: 20, left: 20};
+const margin = {top: 0, right: 20, bottom: 20, left: 60};
 
 const monthsWidth = 2; // width of the areas
+const curve = d3.curveCatmullRom;
 
 class AreaChart extends Component {
   state = {
     arcs: [],
+    xScale: () => 0,
+    yScale: () => 0,
   }
+
+  xAxis = d3.axisBottom().tickSizeOuter(0)
+  yAxis = d3.axisLeft().tickSizeOuter(0)
+    .tickFormat(d => `${d3.format('$')(parseInt(d / 1000000))}M`)
 
   static getDerivedStateFromProps(nextProps) {
     const {movies, filtered, colors} = nextProps;
@@ -36,7 +43,7 @@ class AreaChart extends Component {
     // need area generater
     const areaGen = d3.area()
       .y0(yScale(0))
-      .curve(d3.curveCatmullRom);
+      .curve(curve);
 
     // calculate arcs from the movies
     const arcs = _.chain(movies)
@@ -54,16 +61,29 @@ class AreaChart extends Component {
         }
       }).value();
 
-    return {arcs}
+    return {arcs, xScale, yScale}
+  }
+
+  componentDidUpdate() {
+    this.xAxis.scale(this.state.xScale);
+    this.yAxis.scale(this.state.yScale);
+
+    d3.select(this.refs.xAxis).call(this.xAxis);
+    d3.select(this.refs.yAxis).call(this.yAxis)
+      .select('.domain').remove();
   }
 
   render() {
     return (
       <svg width={width} height={height}>
-        {
-          this.state.arcs.map(d =>
-            <path d={d.path} fill={d.fill} stroke='#fff' />)
-        }
+        <g className='arcs'>
+          {
+            this.state.arcs.map(d =>
+              <path d={d.path} fill={d.fill} stroke='#fff' />)
+          }
+        </g>
+        <g ref='xAxis' className='xAxis' transform={`translate(0, ${this.state.yScale(0)})`} />
+        <g ref='yAxis' className='yAxis' transform={`translate(${margin.left}, 0)`} />
       </svg>
     )
   }
