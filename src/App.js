@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import * as d3 from "d3";
 import _ from "lodash";
 
+import AreaChart from './visualizations/AreaChart';
 import Histogram from './visualizations/Histogram';
 
 const startYear = 2008;
@@ -34,6 +35,7 @@ class App extends Component {
   render() {
     return (
       <div>
+        <AreaChart {...this.state} />
         <div style={{display: 'inline-block'}}>
           <h2>Distribution of Metascores</h2>
           <Histogram {...this.state} attr='score' />
