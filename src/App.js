@@ -53,9 +53,12 @@ class App extends Component {
 
   render() {
     return (
-      <div>
-
-        <div>
+      <div style={{width: 1000, margin: 'auto'}}>
+        <h1>The Seasonality of Box Office Hits</h1>
+        <p style={{width: 600, lineHeight: 2, margin: 'auto', marginBottom: 20}}>
+In the last decade, most block buster hits have happened around or during the summer and winter holidays.  <strong>Brush</strong> the histograms to filter the movies by metascore and/or box office figures, and <strong>hover</strong> the movies to see more details.
+        </p>
+        <div style={{position: 'relative'}}>
           <div style={{position: 'absolute', left: '65px'}}>
             <strong>$ over/under median box office</strong>
           </div>
@@ -64,7 +67,7 @@ class App extends Component {
 
         <div style={{display: 'inline-block'}}>
           <Histogram {...this.state} attr='score' updateFilters={this.updateFilters} />
-          <div style={{textAlign: 'center'}}>
+          <div>
             <strong>metascores</strong>
           </div>
         </div>
@@ -72,11 +75,11 @@ class App extends Component {
         <div style={{display: 'inline-block'}}>
           <Histogram {...this.state} attr='boxOffice'
             format={d => `$${parseInt(d/ 1000000)}M`} updateFilters={this.updateFilters} />
-          <div style={{textAlign: 'center'}}>
+          <div>
             <strong>box office figures</strong>
           </div>
         </div>
-
+        
       </div>
     )
   }
