@@ -4,7 +4,7 @@ import _ from "lodash";
 
 const width = 1000;
 const height = 300;
-const margin = {top: 0, right: 20, bottom: 20, left: 60};
+const margin = {top: 0, right: 0, bottom: 20, left: 60};
 
 const monthsWidth = 2; // width of the areas
 const curve = d3.curveCatmullRom;

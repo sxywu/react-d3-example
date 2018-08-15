@@ -35,16 +35,29 @@ class App extends Component {
   render() {
     return (
       <div>
-        <AreaChart {...this.state} />
-        <div style={{display: 'inline-block'}}>
-          <h2>Distribution of Metascores</h2>
-          <Histogram {...this.state} attr='score' />
+
+        <div>
+          <div style={{position: 'absolute', left: '65px'}}>
+            <strong>$ over/under median box office</strong>
+          </div>
+          <AreaChart {...this.state} />
         </div>
+
         <div style={{display: 'inline-block'}}>
-          <h2>Distribution of Box Office Figures</h2>
+          <Histogram {...this.state} attr='score' />
+          <div style={{textAlign: 'center'}}>
+            <strong>metascores</strong>
+          </div>
+        </div>
+
+        <div style={{display: 'inline-block'}}>
           <Histogram {...this.state} attr='boxOffice'
             format={d => `$${parseInt(d/ 1000000)}M`} />
+          <div style={{textAlign: 'center'}}>
+            <strong>box office figures</strong>
+          </div>
         </div>
+        
       </div>
     )
   }
