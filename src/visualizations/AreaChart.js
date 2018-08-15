@@ -12,6 +12,7 @@ const curve = d3.curveCatmullRom;
 class AreaChart extends Component {
   state = {
     arcs: [],
+    rects: [],
     xScale: () => 0,
     yScale: () => 0,
     hovered: null,
@@ -22,7 +23,7 @@ class AreaChart extends Component {
     .tickFormat(d => `${d3.format('$')(parseInt(d / 1000000))}M`)
 
   static getDerivedStateFromProps(nextProps) {
-    const {movies, filtered, colors} = nextProps;
+    const {movies, filtered, holidays, colors} = nextProps;
     if (!movies.length) return {};
 
     // calculate median box office
@@ -63,7 +64,16 @@ class AreaChart extends Component {
         }
       }).value();
 
-    return {arcs, xScale, yScale}
+    const rects = _.map(holidays, (d, i) => {
+      const [x1, x2] = d;
+      const x = xScale(x1);
+      return {
+        x, width: xScale(x2) - x, y: 25, height: 10,
+        fill: i % 2 === 0 ? 'rgb(254, 224, 144)' : 'rgb(171, 217, 233)',
+      };
+    });
+
+    return {arcs, rects, holidays, xScale, yScale}
   }
 
   componentDidUpdate() {
@@ -79,6 +89,14 @@ class AreaChart extends Component {
     return (
       <div style={{display: 'inline-block', position: 'relative'}}>
         <svg width={width} height={height}>
+          <g className='holidays'>
+            {
+              this.state.rects.map(d =>
+                <rect x={d.x} width={d.width} y={d.y} height={d.height}
+                  fill={d.fill} opacity='0.5' />)
+            }
+          </g>
+
           <g className='arcs'>
             {
               this.state.arcs.map(d =>
@@ -87,6 +105,7 @@ class AreaChart extends Component {
                   onMouseLeave={() => this.setState({hovered: null})} />)
             }
           </g>
+
           <g ref='xAxis' className='xAxis' transform={`translate(0, ${this.state.yScale(0)})`} />
           <g ref='yAxis' className='yAxis' transform={`translate(${margin.left}, 0)`} />
         </svg>
@@ -101,7 +120,7 @@ class AreaChart extends Component {
           <strong>box office</strong> { this.state.hovered &&
             d3.format("$,.0f")(this.state.hovered.data.boxOffice) }<br />
         </div>
-      }
+
       </div>
     )
   }

@@ -8,12 +8,23 @@ import Histogram from './visualizations/Histogram';
 const startYear = 2008;
 const numYears = 10;
 
+const holidays = _.chain(numYears)
+  .times(i => {
+    return [
+      [new Date(`6/1/${startYear + i}`), new Date(`8/30/${startYear + i}`)],
+      [new Date(`11/1/${startYear + i}`), new Date(`12/31/${startYear + i}`)],
+    ];
+  }).flatten()
+  .value();
+
+
 class App extends Component {
   state = {
     movies: [],
     filtered: [],
     filters: {},
     colors: d3.scaleSequential(d3.interpolateViridis),
+    holidays,
   };
 
   componentDidMount() {
