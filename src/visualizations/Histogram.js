@@ -33,6 +33,9 @@ class Histogram extends Component {
     const yScale = d3.scaleLinear()
       .domain([0, yMax]).range([height - margin.bottom, margin.top]);
 
+    // use filtered for bins now that scales are calculated
+    bins = histogram(filtered);
+    
     // calculate rect bar for each bin
     const bars = bins.map(d => {
       const {x0, x1} = d;
@@ -52,9 +55,30 @@ class Histogram extends Component {
     return {bars, xScale};
   }
 
+  componentDidMount() {
+    this.brush = d3.brushX().extent([
+      [margin.left, margin.top],
+      [width - margin.right, height - margin.bottom]
+    ]).on('end', this.brushEnd);
+
+    d3.select(this.refs.brush).call(this.brush);
+  }
+
   componentDidUpdate() {
     this.xAxis.scale(this.state.xScale).tickFormat(this.props.format);
     d3.select(this.refs.xAxis).call(this.xAxis);
+  }
+
+  brushEnd = () => {
+    let bounds = null;
+    if (d3.event.selection) {
+      const [x1, x2] = d3.event.selection;
+      bounds = [
+        this.state.xScale.invert(x1),
+        this.state.xScale.invert(x2),
+      ]
+    }
+    this.props.updateFilters({[this.props.attr]: bounds});
   }
 
   render() {
@@ -69,6 +93,7 @@ class Histogram extends Component {
           }
         </g>
         <g ref='xAxis' className='xAxis' transform={`translate(0, ${height - margin.bottom})`} />
+        <g ref='brush' className='brush' />
       </svg>
     )
   }

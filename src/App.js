@@ -12,6 +12,7 @@ class App extends Component {
   state = {
     movies: [],
     filtered: [],
+    filters: {},
     colors: d3.scaleSequential(d3.interpolateViridis),
   };
 
@@ -23,13 +24,20 @@ class App extends Component {
           .map(d => Object.assign(d, {date: new Date(d.date)}))
           .filter(d => d.boxOffice && d.year >= startYear)
           .value();
-          console.log(movies)
 
         const colorDomain = d3.extent(movies, d => d.score);
         this.state.colors.domain(colorDomain).nice();
 
-        this.setState({movies});
+        this.setState({movies, filtered: movies});
       });
+  }
+
+  updateFilters = (filter) => {
+    const filters = Object.assign(this.state.filters, filter);
+    const filtered = _.filter(this.state.movies, d =>
+      _.every(filters, (bounds, key) => !bounds || bounds[0] < d[key] && d[key] < bounds[1]));
+
+    this.setState({filters, filtered});
   }
 
   render() {
@@ -44,7 +52,7 @@ class App extends Component {
         </div>
 
         <div style={{display: 'inline-block'}}>
-          <Histogram {...this.state} attr='score' />
+          <Histogram {...this.state} attr='score' updateFilters={this.updateFilters} />
           <div style={{textAlign: 'center'}}>
             <strong>metascores</strong>
           </div>
@@ -52,12 +60,12 @@ class App extends Component {
 
         <div style={{display: 'inline-block'}}>
           <Histogram {...this.state} attr='boxOffice'
-            format={d => `$${parseInt(d/ 1000000)}M`} />
+            format={d => `$${parseInt(d/ 1000000)}M`} updateFilters={this.updateFilters} />
           <div style={{textAlign: 'center'}}>
             <strong>box office figures</strong>
           </div>
         </div>
-        
+
       </div>
     )
   }

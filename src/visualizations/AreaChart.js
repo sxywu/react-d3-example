@@ -45,8 +45,8 @@ class AreaChart extends Component {
       .y0(yScale(0))
       .curve(curve);
 
-    // calculate arcs from the movies
-    const arcs = _.chain(movies)
+    // calculate arcs from the filtered movies
+    const arcs = _.chain(filtered)
       // put biggest arcs in the background
       .sortBy(d => -Math.abs(d.boxOffice - medianBox))
       .map(d => {
