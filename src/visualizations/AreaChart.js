@@ -14,6 +14,7 @@ class AreaChart extends Component {
     arcs: [],
     xScale: () => 0,
     yScale: () => 0,
+    hovered: null,
   }
 
   xAxis = d3.axisBottom().tickSizeOuter(0)
@@ -58,6 +59,7 @@ class AreaChart extends Component {
             [xScale(d3.timeMonth.offset(d.date, 2)), yScale(0)],
           ]),
           fill: colors(d.score),
+          data: d,
         }
       }).value();
 
@@ -75,16 +77,32 @@ class AreaChart extends Component {
 
   render() {
     return (
-      <svg width={width} height={height}>
-        <g className='arcs'>
-          {
-            this.state.arcs.map(d =>
-              <path d={d.path} fill={d.fill} stroke='#fff' />)
-          }
-        </g>
-        <g ref='xAxis' className='xAxis' transform={`translate(0, ${this.state.yScale(0)})`} />
-        <g ref='yAxis' className='yAxis' transform={`translate(${margin.left}, 0)`} />
-      </svg>
+      <div style={{display: 'inline-block', position: 'relative'}}>
+        <svg width={width} height={height}>
+          <g className='arcs'>
+            {
+              this.state.arcs.map(d =>
+                <path d={d.path} fill={d.fill} stroke='#fff'
+                  onMouseEnter={() => this.setState({hovered: d})}
+                  onMouseLeave={() => this.setState({hovered: null})} />)
+            }
+          </g>
+          <g ref='xAxis' className='xAxis' transform={`translate(0, ${this.state.yScale(0)})`} />
+          <g ref='yAxis' className='yAxis' transform={`translate(${margin.left}, 0)`} />
+        </svg>
+
+        <div style={{
+          display: this.state.hovered ? 'block' : 'none', position: 'absolute', top: 0, right: 0,
+          margin: '10px', padding: '10px', width: '240px', background: 'rgba(255, 255, 255, 0.7)'}}>
+          <strong>title</strong> { this.state.hovered && this.state.hovered.data.title }<br />
+          <strong>date</strong> { this.state.hovered &&
+            d3.timeFormat('%b %d, %Y')(this.state.hovered.data.date) }<br />
+          <strong>metascore</strong> { this.state.hovered && this.state.hovered.data.score }<br />
+          <strong>box office</strong> { this.state.hovered &&
+            d3.format("$,.0f")(this.state.hovered.data.boxOffice) }<br />
+        </div>
+      }
+      </div>
     )
   }
 }
