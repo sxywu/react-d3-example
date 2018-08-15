@@ -12,7 +12,7 @@ const curve = d3.curveCatmullRom;
 class AreaChart extends Component {
   state = {
     arcs: [],
-    rects: [],
+    texts: [],
     xScale: () => 0,
     yScale: () => 0,
     hovered: null,
@@ -64,16 +64,18 @@ class AreaChart extends Component {
         }
       }).value();
 
-    const rects = _.map(holidays, (d, i) => {
-      const [x1, x2] = d;
-      const x = xScale(x1);
+    const texts = _.map(holidays, (d, i) => {
+      const [d1, d2] = d;
+      const x1 = xScale(d1);
+      const x2 = xScale(d2);
       return {
-        x, width: xScale(x2) - x, y: 25, height: 10,
-        fill: i % 2 === 0 ? 'rgb(254, 224, 144)' : 'rgb(171, 217, 233)',
+        x: (x1 + x2) / 2, width: x2 - x1, y: 36, height: 14,
+        fill: i % 2 === 0 ? 'rgb(253, 174, 97)' : 'rgb(116, 173, 209)',
+        text: i % 2 === 0 ? 'S' : 'W',
       };
     });
 
-    return {arcs, rects, holidays, xScale, yScale}
+    return {arcs, texts, holidays, xScale, yScale}
   }
 
   componentDidUpdate() {
@@ -91,9 +93,18 @@ class AreaChart extends Component {
         <svg width={width} height={height}>
           <g className='holidays'>
             {
-              this.state.rects.map(d =>
-                <rect x={d.x} width={d.width} y={d.y} height={d.height}
-                  fill={d.fill} opacity='0.5' />)
+              this.state.texts.map(d => {
+                return (
+                  <g transform={`translate(${d.x}, ${d.y})`}>
+                    <rect x={-d.width / 2} y={-d.height / 2}
+                      width={d.width} height={d.height} fill={d.fill} />
+                    <text dy='.35em' textAnchor='middle' fill='#fff'>
+                      {d.text}
+                    </text>
+                  </g>
+                );
+
+              })
             }
           </g>
 
