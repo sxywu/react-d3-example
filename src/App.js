@@ -40,8 +40,10 @@ class App extends Component {
     return (
       <div style={{width: 1000, margin: 'auto'}}>
 
+        <AreaChart {...this.state} />
+
         <Histogram {...this.state} attr='score' updateFilters={this.updateFilters} />
-        
+
         <Histogram {...this.state} attr='boxOffice'
           format={d => `$${parseInt(d/ 1000000)}M`} updateFilters={this.updateFilters} />
       </div>
