@@ -32,7 +32,8 @@ class AreaChart extends Component {
     // create area generator
 
     // calculate arcs
-    
+    // (area generator assumes [x, y1])
+
     return {}
   }
 
