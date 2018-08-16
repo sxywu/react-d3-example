@@ -68,6 +68,7 @@ class Histogram extends Component {
 
   brushEnd = () => {
     // call updateFilters with bounds of brush
+    // (make sure to account for no bounds)
   }
 
   render() {

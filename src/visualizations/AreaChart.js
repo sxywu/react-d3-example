@@ -27,7 +27,7 @@ class AreaChart extends Component {
 
     // calculate median box office
 
-    // calculate x/y scale
+    // calculate x, y, and color scale
 
     // create area generator
 

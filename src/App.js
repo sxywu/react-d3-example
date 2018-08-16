@@ -33,7 +33,7 @@ class App extends Component {
   }
 
   updateFilters = (filter) => {
-    // update filters, and then filter movies by the new filters
+    // update filters, and then filter movies by the new filters' bounds
   }
 
   render() {
